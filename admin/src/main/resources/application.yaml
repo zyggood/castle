@@ -1,4 +1,21 @@
+server:
+  port: 10002
+
 spring:
   application:
     name: admin
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: mz3fNNbXK1hK
+      serverAddr: 127.0.0.1:8848
+      config:
+        import-check:
+          enabled: true
+      username: nacos
+      password: mz3fNNbXK1hK
+  config:
+    import:
+      - nacos:nacos-config-example.properties?refreshEnabled=true

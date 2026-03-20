@@ -1,3 +1,48 @@
 spring:
   application:
     name: gateway
+
+
+  cloud:
+    gateway:
+      routes:
+        - id: admin
+          uri: lb://admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1  # ?? /api ??
+            - AddRequestHeader=X-Request-Foo, Bar
+      server:
+        webflux:
+          routes:
+            - id: admin
+              uri: lb://admin
+              predicates:
+                - Path=/admin/**
+              filters:
+                - StripPrefix=1  # ?? /api ??
+                - AddRequestHeader=X-Request-Foo, Bar
+    #                - name: RequestRateLimiter  # ??
+    #                  args:
+    #                    redis-rate-limiter.replenishRate: 10
+    #                    redis-rate-limiter.burstCapacity: 20
+
+
+
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: mz3fNNbXK1hK
+      serverAddr: 127.0.0.1:8848
+      config:
+        import-check:
+          enabled: true
+      username: nacos
+      password: mz3fNNbXK1hK
+  config:
+    import:
+      - nacos:nacos-config-example.properties?refreshEnabled=true
+server:
+  port: 10001
