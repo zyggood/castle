@@ -10,6 +10,7 @@ spring:
         server-addr: 127.0.0.1:8848
         username: nacos
         password: mz3fNNbXK1hK
+        namespace: public
       serverAddr: 127.0.0.1:8848
       config:
         import-check:

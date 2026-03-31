@@ -5,16 +5,29 @@ spring:
 
   cloud:
     gateway:
-      routes:
-        - id: admin
-          uri: lb://admin
-          predicates:
-            - Path=/admin/**
-          filters:
-            - StripPrefix=1  # ?? /api ??
-            - AddRequestHeader=X-Request-Foo, Bar
       server:
         webflux:
+          globalcors:
+            add-to-simple-url-handler-mapping: true  # 处理OPTIONS预检请求
+            cors-configurations:
+              '[/**]':
+                allowed-origins:
+                  - "https://*.example.com"
+                  - "http://localhost:*"
+                allowed-methods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowed-headers:
+                  - Content-Type
+                  - Authorization
+                  - X-Requested-With
+                allow-credentials: true
+                max-age: 3600
+                exposedHeaders: # 前端可访问的响应头
+                  - Authorization
           routes:
             - id: admin
               uri: lb://admin
@@ -35,6 +48,7 @@ spring:
         server-addr: 127.0.0.1:8848
         username: nacos
         password: mz3fNNbXK1hK
+        namespace: public
       serverAddr: 127.0.0.1:8848
       config:
         import-check:
@@ -46,3 +60,10 @@ spring:
       - nacos:nacos-config-example.properties?refreshEnabled=true
 server:
   port: 10001
+
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    com.alibaba.nacos: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
